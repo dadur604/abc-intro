@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Stage } from "@inlet/react-pixi";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
+import "./App.css";
+import Homepage from "./Homepage";
+import Drawing from "./Drawing";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* Put in your code here! */}
+      <Stage
+        width={500}
+        height={500}
+        options={{
+          backgroundColor: 0xeeeeff,
+        }}
+      >
+        <BrowserRouter>
+          <Switch>
+            <Route path="/draw">
+              <Drawing />
+            </Route>
+
+            <Route path="/">
+              <Homepage />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </Stage>
     </div>
   );
 }
