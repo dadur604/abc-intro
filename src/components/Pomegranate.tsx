@@ -80,6 +80,10 @@ export default function Pomegranate() {
     randomSprite = randomSpriteFunction(randomPosition.x, randomPosition.y, sprite_W, sprite_H, 'random');
     opacitySprite = OpacitySpriteFunction(opacityPosition.x, opacityPosition.y, sprite_W, sprite_H, 'opaque');
 
+
+    const buttonHome = () => {
+      
+    }
     
 
 
@@ -96,13 +100,18 @@ export default function Pomegranate() {
       pomegranate.buttonMode = true;
 
       pomegranate.on("pointerdown", () => {
-        console.log('hello random')
         // change currentPosition
-        let newX = [100, 200, 250, 400, 500, 505,50];
-        let newY = [100, 200, 300, 400, 500, 505];
 
-        pomegranate.x = newX[Math.floor(Math.random() * newX.length)]
-        pomegranate.y = newY[Math.floor(Math.random() * newY.length)]
+        // create range value for x and y
+        const randomFromRange = (start: number, end: number) => {
+          const range = end - start;
+          const random = Math.random() * range;
+          return start + random
+
+        }
+
+        pomegranate.x = randomFromRange(100, 500)
+        pomegranate.y = randomFromRange(100, 500)
       })
 
       pomegranate.name = name
