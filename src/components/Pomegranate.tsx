@@ -3,8 +3,8 @@ import * as PIXI from 'pixi.js';
 import Pom from '../images/pom.png';
 
 // let createSprite;
-let randomSprite;
-let opacitySprite;
+let randomSprite: any;
+let opacitySprite: any;
 
 
 const app = new PIXI.Application();
@@ -15,6 +15,8 @@ export default function Pomegranate() {
   const [randomPosition] = useState({x: 100, y: 100})
   const [opacityPosition] = useState({x: 300, y: 250});
   
+
+
   const setup = () => {
     app.loader
     .add("pomegranate", Pom)
@@ -27,14 +29,36 @@ export default function Pomegranate() {
     const sprite_H = 100;
     const sprite_W = 100;
 
-    const pinkGraphic = new PIXI.Graphics();
-    pinkGraphic.interactive = true;
-    pinkGraphic.beginFill(0xFFC2CB);
-    pinkGraphic.drawRect(0, 0, app.renderer.width, app.renderer.height);
-    app.stage.addChild(pinkGraphic);
+    const Background = new PIXI.Graphics();
+    Background.interactive = true;
+    Background.beginFill(0xADD8E6);
+    Background.drawRect(0, 0, app.renderer.width, app.renderer.height);
 
     const PomegranateContainer = new PIXI.Container();
-    app.stage.addChild(PomegranateContainer)
+
+
+    const button = new PIXI.Graphics();
+    button.interactive = true;
+    button.buttonMode = true;
+    button
+      .beginFill(0xffb6c1, 1)
+      .drawRoundedRect(10, 10, 80, 30, 20)
+      .endFill()
+
+    let home = new PIXI.Text('/');
+    home.x = 45
+    home.y = 10;
+
+    let homeDraw = new PIXI.Text('/draw');
+    homeDraw.x = 15
+    homeDraw.y = 10;
+
+    let welcome = new PIXI.Text('Welcome To My First Pixi Page')
+    welcome.x = 150
+    welcome.y = 250
+    Background.addChild(welcome)
+
+
 
 
     function createSpriteFunction (parent: any) {
@@ -48,9 +72,9 @@ export default function Pomegranate() {
 
     const PomStorage = []
 
-    pinkGraphic.on('pointerdown', pointerDown)
-    pinkGraphic.on('pointermove', pointerMove)
-    pinkGraphic.on('pointerup', pointerUp)
+    Background.on('pointerdown', pointerDown)
+    Background.on('pointermove', pointerMove)
+    Background.on('pointerup', pointerUp)
 
 
     let dragging = false;
@@ -60,8 +84,8 @@ export default function Pomegranate() {
         const { x, y } = event.data.global
         const pom = createSpriteFunction(PomegranateContainer)
 
-        pom.x = x;
-        pom.y = y;
+        pom.x = x - 50;
+        pom.y = y - 50;
 
         PomStorage.push(pom)
       }
@@ -72,20 +96,12 @@ export default function Pomegranate() {
       pointerMove(event);
     }
 
-
     function pointerUp() {
       dragging = false;
-  }
+    }
     
     randomSprite = randomSpriteFunction(randomPosition.x, randomPosition.y, sprite_W, sprite_H, 'random');
     opacitySprite = OpacitySpriteFunction(opacityPosition.x, opacityPosition.y, sprite_W, sprite_H, 'opaque');
-
-
-    const buttonHome = () => {
-      
-    }
-    
-
 
     function randomSpriteFunction (x: number, y: number, w: number, h: number, name: string) {
       const pomegranate = new PIXI.Sprite(app.loader.resources["pomegranate"].texture);
@@ -117,8 +133,6 @@ export default function Pomegranate() {
       pomegranate.name = name
 
       return pomegranate;
-
-
     }
 
     function OpacitySpriteFunction (x: number, y: number, w: number, h: number, name: string) {
@@ -143,7 +157,29 @@ export default function Pomegranate() {
       return pomegranate;
     }
 
-    app.stage.addChild(randomSprite, opacitySprite);
+    let success = true
+
+    button.on('pointerdown', () => {
+      console.log('bang')
+      if (success) {
+        app.stage.removeChild(PomegranateContainer)
+        button.removeChild(homeDraw)
+        button.addChild(home)
+        app.stage.addChild(randomSprite, opacitySprite);
+        Background.removeChild(welcome)
+
+        success = false
+      } else {
+        app.stage.removeChild(randomSprite, opacitySprite)
+        button.removeChild(home)
+        button.addChild(homeDraw)
+        app.stage.addChild(PomegranateContainer)
+        success = true
+      }
+    })
+
+    app.stage.addChild(Background);
+    app.stage.addChild(button)
 
   };
 
